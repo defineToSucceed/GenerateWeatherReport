@@ -10,7 +10,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
 /**
- * @author navneethnarendra
+ * @author 	navneethnarendra
+ * 
+ * @desc	current weather state	
  *
  */
 public class ReadCurrentWeather {
@@ -63,10 +65,27 @@ public class ReadCurrentWeather {
 		Gson gson = new GsonBuilder().create();
 		JsonObject job = gson.fromJson(response.toString(), JsonObject.class);
 
-		System.out.println("CITY : " + job.get("name") + " COUNTRY : " + job.getAsJsonObject("sys").get("country")
-				+ " RAIN : " + job.getAsJsonArray("weather").get(0).getAsJsonObject().get("description") + " HIGH : "
-				+ job.getAsJsonObject("main").get("temp_max") + " LOW : "
-				+ job.getAsJsonObject("main").get("temp_min"));
+		System.out.println("CITY : " + job.get("name") 
+				+ " COUNTRY : " + job.getAsJsonObject("sys").get("country")
+				+ " RAIN : " + job.getAsJsonArray("weather").get(0).getAsJsonObject().get("description") 
+				+ " HIGH : " + job.getAsJsonObject("main").get("temp_max") 
+				+ " LOW : " + job.getAsJsonObject("main").get("temp_min"));
 	}
-
+	
+	/* response payload
+	{	
+		"coord":{"lon":77.6,"lat":12.98},
+		"weather":[{"id":701,"main":"Mist","description":"mist","icon":"50n"}],
+		"base":"stations",
+		"main":{"temp":289.15,"pressure":1016,"humidity":100,"temp_min":289.15,"temp_max":289.15},
+		"visibility":5000,
+		"wind":{"speed":1},
+		"clouds":{"all":0},
+		"dt":1540330200,
+		"sys":{"type":1,"id":7823,"message":0.0042,"country":"IN","sunrise":1540255273,"sunset":1540297573},
+		"id":1277333,
+		"name":"Bangalore",
+		"cod":200
+	}
+	*/
 }
