@@ -10,7 +10,6 @@ import org.openweathermap.api.model.uvi.Uvi;
 import org.openweathermap.api.query.Language;
 import org.openweathermap.api.query.QueryBuilderPicker;
 import org.openweathermap.api.query.ResponseFormat;
-import org.openweathermap.api.query.Type;
 import org.openweathermap.api.query.UnitFormat;
 import org.openweathermap.api.query.currentweather.CurrentWeatherOneLocationQuery;
 import org.openweathermap.api.query.currentweather.InCycle;
@@ -34,7 +33,7 @@ public class WeatherRead {
 		getUviCurrent();
 
 		getUviForecast();
-		
+
 		// TODO: getDailyForecast();
 	}
 
@@ -53,7 +52,7 @@ public class WeatherRead {
 																	// coordinate
 																	// cities
 				.language(Language.ENGLISH) // in English language
-				.unitFormat(UnitFormat.METRIC) // in metric units
+				.unitFormat(UnitFormat.IMPERIAL) // in metric units
 				.build();
 		List<CurrentWeather> currentWeatherList = client.getCurrentWeather(inCycle);
 		for (CurrentWeather currentWeather : currentWeatherList) {
@@ -66,36 +65,32 @@ public class WeatherRead {
 		CurrentWeatherOneLocationQuery currentWeatherOneLocationQuery = QueryBuilderPicker.pick().currentWeather() // get
 																													// current
 																													// weather
-				.oneLocation() // for one location
-				.byCityName("Kharkiv") // for Kharkiv city
-				.countryCode("UA") // in Ukraine
-				.type(Type.ACCURATE) // with Accurate search
+				.oneLocation().byZipCode("94582", "US") // for one location
+				// .type(Type.ACCURATE) // with Accurate search
 				.language(Language.ENGLISH) // in English language
 				.responseFormat(ResponseFormat.JSON)// with JSON response format
-				.unitFormat(UnitFormat.METRIC) // in metric units
+				.unitFormat(UnitFormat.IMPERIAL) // in metric units
 				.build();
 		CurrentWeather currentWeather = client.getCurrentWeather(currentWeatherOneLocationQuery);
 		System.out.println(printCurrentWeather(currentWeather));
 	}
 
-	/* TODO: API issue
-	private static void getDailyForecast() {
-		DataWeatherClient client = new UrlConnectionDataWeatherClient(API_KEY);
-		ByCityName byCityNameForecast = QueryBuilderPicker.pick().forecast() // get
-																				// forecast
-				.daily() // it should be dailt
-				.byCityName("Kharkiv") // for Kharkiv city
-				.countryCode("UA") // in Ukraine
-				.unitFormat(UnitFormat.METRIC) // in Metric units
-				.language(Language.ENGLISH) // in English
-				.build();
-		ForecastInformation<DailyForecast> forecastInformation = client.getForecastInformation(byCityNameForecast);
-		System.out.println(forecastInformation.getCity());
-		for (DailyForecast forecast : forecastInformation.getForecasts()) {
-			System.out.println(String.format("Temperature on %s will be: %s", forecast.getDateTime().toString(),
-					forecast.getTemperature().toString()));
-		}
-	}*/
+	/*
+	 * TODO: API issue private static void getDailyForecast() {
+	 * DataWeatherClient client = new UrlConnectionDataWeatherClient(API_KEY);
+	 * ByCityName byCityNameForecast = QueryBuilderPicker.pick().forecast() //
+	 * get // forecast .daily() // it should be dailt .byCityName("Kharkiv") //
+	 * for Kharkiv city .countryCode("UA") // in Ukraine
+	 * .unitFormat(UnitFormat.METRIC) // in Metric units
+	 * .language(Language.ENGLISH) // in English .build();
+	 * ForecastInformation<DailyForecast> forecastInformation =
+	 * client.getForecastInformation(byCityNameForecast);
+	 * System.out.println(forecastInformation.getCity()); for (DailyForecast
+	 * forecast : forecastInformation.getForecasts()) {
+	 * System.out.println(String.format("Temperature on %s will be: %s",
+	 * forecast.getDateTime().toString(),
+	 * forecast.getTemperature().toString())); } }
+	 */
 
 	private static void getHourlyForecast() {
 		DataWeatherClient client = new UrlConnectionDataWeatherClient(API_KEY);
