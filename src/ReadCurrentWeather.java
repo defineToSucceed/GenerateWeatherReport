@@ -13,7 +13,7 @@ import com.google.gson.JsonObject;
  * @author navneethnarendra
  *
  */
-public class WeatherRESTAPIRead {
+public class ReadCurrentWeather {
 
 	private static final String API_KEY = "d1158b740a06486ee301974b05f77baf";
 
@@ -26,12 +26,11 @@ public class WeatherRESTAPIRead {
 		System.out.println("Enter country : ");
 		String country = scanner.next();
 
-		String jsonResponse = invokeWeatherRESTapi(city, country);
+		invokeWeatherRESTapi(city, country);
 
-		readJSONoutput(jsonResponse);
 	}
 
-	private static String invokeWeatherRESTapi(String city, String country) throws Exception {
+	private static void invokeWeatherRESTapi(String city, String country) throws Exception {
 
 		String url = "http://api.openweathermap.org/data/2.5/weather?q=" + city + "," + country + "&appid=" + API_KEY;
 		final String USER_AGENT = "Mozilla/5.0";
@@ -41,16 +40,22 @@ public class WeatherRESTAPIRead {
 		con.setRequestMethod("GET");
 		con.setRequestProperty("User-Agent", USER_AGENT);
 
-		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-		String inputLine;
-		StringBuffer response = new StringBuffer();
+		if (con.getResponseCode() == 200) {
 
-		while ((inputLine = in.readLine()) != null) {
-			response.append(inputLine);
+			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+			String inputLine;
+			StringBuffer response = new StringBuffer();
+
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			in.close();
+
+			readJSONoutput(response.toString());
+
+		} else {
+			System.out.println("City/Country combination Not Found");
 		}
-		in.close();
-
-		return response.toString();
 
 	}
 
@@ -58,16 +63,10 @@ public class WeatherRESTAPIRead {
 		Gson gson = new GsonBuilder().create();
 		JsonObject job = gson.fromJson(response.toString(), JsonObject.class);
 
-		// if (job.get("cod").toString().equals("200")) {
-
 		System.out.println("CITY : " + job.get("name") + " COUNTRY : " + job.getAsJsonObject("sys").get("country")
 				+ " RAIN : " + job.getAsJsonArray("weather").get(0).getAsJsonObject().get("description") + " HIGH : "
 				+ job.getAsJsonObject("main").get("temp_max") + " LOW : "
 				+ job.getAsJsonObject("main").get("temp_min"));
-		// } else {
-		// System.out.println(job.get("message"));
-		// }
-
 	}
 
 }
