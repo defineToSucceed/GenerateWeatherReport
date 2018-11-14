@@ -1,5 +1,6 @@
 import requests
 import json
+import os
 
 api_key = 'd1158b740a06486ee301974b05f77baf'
 city = 'Chicago'
@@ -10,7 +11,17 @@ def five_day_forecast():
     dict = fd.json()
     select_data = dict['list']
 
+    file = open("5day_forecast.txt","w")
     for box in select_data:
-            print("CITY: " + dict["city"]["name"] + ", COUNTRY: " + dict["city"]["country"] + ", DATETIME: " + box['dt_txt'] + ", MIN_TEMP: " + str(box['main']['temp_min']) + ", MAX_TEMP: " + str(box['main']['temp_max']) + ", WEATHER: " + box['weather'][0]['description'])
-            
+            ## print("CITY: " + dict["city"]["name"] + ", COUNTRY: " + dict["city"]["country"] + ", DATETIME: " + box['dt_txt'] + ", MIN_TEMP: " + str(box['main']['temp_min']) + ", MAX_TEMP: " + str(box['main']['temp_max']) + ", WEATHER: " + box['weather'][0]['description'])
+            file.write("CITY: " + dict["city"]["name"] + ", COUNTRY: " + dict["city"]["country"] + ", DATETIME: " + box['dt_txt'] + ", MIN_TEMP: " + str(box['main']['temp_min']) + ", MAX_TEMP: " + str(box['main']['temp_max']) + ", WEATHER: " + box['weather'][0]['description'] +"\n")
+    file.close()
+    
+def delete_existing_file():
+    if os.path.exists("5day_forecast.txt"):
+          os.remove("5day_forecast.txt")
+    else:
+          print("5day_forecast.txt does not exist")
+
+delete_existing_file()
 five_day_forecast()
