@@ -1,5 +1,6 @@
 import requests
 import json
+import os
 
 api_key = 'd1158b740a06486ee301974b05f77baf'
 city = 'Chicago'
@@ -8,7 +9,18 @@ country = 'us'
 def current_weather():
     cw = requests.get('http://api.openweathermap.org/data/2.5/weather?q=' + city + ',' + country + '&appid=' + api_key)
     data = cw.json()
-    print("CITY: " + data["name"] + ", COUNTRY: " + data["sys"]["country"] + ", WEATHER: " + data["weather"][0]["description"] + ", MIN_TEMP: " + str(data["main"]["temp_min"]) + ", MAX_TEMP: " + str(data["main"]["temp_max"])) 
+    
+    file = open("current_weather.txt","w")
+    ## print("CITY: " + data["name"] + ", COUNTRY: " + data["sys"]["country"] + ", WEATHER: " + data["weather"][0]["description"] + ", MIN_TEMP: " + str(data["main"]["temp_min"]) + ", MAX_TEMP: " + str(data["main"]["temp_max"])) 
+    file.write("CITY: " + data["name"] + ", COUNTRY: " + data["sys"]["country"] + ", WEATHER: " + data["weather"][0]["description"] + ", MIN_TEMP: " + str(data["main"]["temp_min"]) + ", MAX_TEMP: " + str(data["main"]["temp_max"])) 
+    file.close()
+    
+def delete_existing_file():
+    if os.path.exists("current_weather.txt"):
+          os.remove("current_weather.txt")
+    else:
+          print("current_weather.txt does not exist")
+
     
 current_weather()
    
