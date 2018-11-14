@@ -1,10 +1,11 @@
 import requests
 import json
 import os
+import sys
 
 api_key = 'd1158b740a06486ee301974b05f77baf'
-city = 'Chicago'
-country = 'us'
+city = sys.argv[1]
+country = sys.argv[2]
 
 def five_day_forecast():
     fd = requests.get('http://api.openweathermap.org/data/2.5/forecast?q=' + city + ',' + country + '&appid=' + api_key)
