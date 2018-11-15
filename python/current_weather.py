@@ -10,10 +10,16 @@ country = sys.argv[2]
 def current_weather():
     cw = requests.get('http://api.openweathermap.org/data/2.5/weather?q=' + city + ',' + country + '&appid=' + api_key)
     data = cw.json()
-
+    ## print(data["cod"])
+    
     file = open("current_weather.txt","w")
-    ## print("CITY: " + data["name"] + ", COUNTRY: " + data["sys"]["country"] + ", WEATHER: " + data["weather"][0]["description"] + ", MIN_TEMP: " + str(data["main"]["temp_min"]) + ", MAX_TEMP: " + str(data["main"]["temp_max"])) 
-    file.write("CITY: " + data["name"] + ", COUNTRY: " + data["sys"]["country"] + ", WEATHER: " + data["weather"][0]["description"] + ", MIN_TEMP: " + str(data["main"]["temp_min"]) + ", MAX_TEMP: " + str(data["main"]["temp_max"])) 
+
+    if (data["cod"] == "404"):
+            file.write("City/Country combination does not exist")
+    else:
+            ## print("CITY: " + data["name"] + ", COUNTRY: " + data["sys"]["country"] + ", WEATHER: " + data["weather"][0]["description"] + ", MIN_TEMP: " + str(data["main"]["temp_min"]) + ", MAX_TEMP: " + str(data["main"]["temp_max"])) 
+            file.write("CITY: " + data["name"] + ", COUNTRY: " + data["sys"]["country"] + ", WEATHER: " + data["weather"][0]["description"] + ", MIN_TEMP: " + str(data["main"]["temp_min"]) + ", MAX_TEMP: " + str(data["main"]["temp_max"])) 
+    
     file.close()
     
 def delete_existing_file():
